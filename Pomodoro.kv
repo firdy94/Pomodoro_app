@@ -1,0 +1,160 @@
+#:kivy 2.0.0
+<TitleLayout>
+    canvas.before:
+        BorderImage:
+            # BorderImage behaves like the CSS BorderImage
+            border: 2,2,2,2
+            texture: self.background_image.texture
+            pos: self.pos
+            size: self.size
+
+<PomodoroTitle>
+    id:titlemain
+    on_leave: titlemain.update_val()
+    TitleLayout:
+        id: title
+        size_hint: .95, .95
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        cols: 1
+        rows:5
+        Label:
+            id: lab1
+            text: "The Pomodoro Technique"
+            bold: True
+            underline: True
+            font_size: 40
+            color:(0,0,0,1)
+            size_hint: .5, .5
+        BoxLayout:
+            id: box1
+            orientation: 'horizontal'
+            size_hint: .1, .1
+            Label:
+                id:bl1
+                text: "Pomodoro time blocks: "
+                background_active: ""
+                font_size: 20
+                bold:True
+                color:(0,0,0,1)
+                on_text_validate: 
+            TextInput:
+                id: bl2
+                multiline: False
+                background_active: ""
+                background_color: (0,0,0,.4)
+            Label:
+                id:bl3
+        Label:
+            id: lab2
+            text: "List of tasks to be completed: "
+            size_hint: .2, .2
+            font_size: 20
+            bold: True
+            color:(0,0,0,1)
+        TextInput:
+            id: text1
+            multiline: True
+            background_active: ""
+            background_color: (0,0,0,.4)
+            size_hint: .4, .4
+        Button:
+            id: enter
+            text:"Enter"
+            background_color: (0,0,0,.7)
+            size_hint: .1, .1
+            background_active: ""
+            on_press: root.manager.current='taskmain'
+
+
+
+###############################################################
+<TaskLayout>
+    canvas.before:
+        BorderImage:
+            # BorderImage behaves like the CSS BorderImage
+            border: 0,0,0,0
+            texture: self.background_image.texture
+            pos: self.pos
+            size: self.size
+
+<PomodoroTask>
+    id:taskmain
+    on_enter: taskmain.task()
+    TaskLayout:
+        id: task
+        size_hint: .95, .95
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        cols: 1
+        rows:1
+        Label:
+            id: time_lab
+            text: root.init
+            bold: True
+            underline: True
+            font_size: 40
+            color:(0,0,0,1)
+            size_hint: .5, .5
+
+############################################################
+<TaskStartLayout>
+    canvas.before:
+        BorderImage:
+            # BorderImage behaves like the CSS BorderImage
+            border: 0,0,0,0
+            texture: self.background_image.texture
+            pos: self.pos
+            size: self.size
+
+<PomodoroTaskStart>
+    id:taskstart
+    on_enter: taskstart.next_label()
+    TaskStartLayout:
+        id: taskstartlay
+        size_hint: .95, .95
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        cols: 1
+        rows:1
+        BoxLayout:
+            Label:
+                id: timer_label
+                text: "Good job!\nDid you complete a task within this block of time? (y/n): "
+                bold: True
+                underline: True
+                font_size: 10
+                color: (0, 0, 0, 1)
+            TextInput:
+                id: completion 
+                multiline: False
+                size_hint: (0.9,0.1)
+                background_color: (0, 0, 0, .4)
+                on_text_validate: root.manager.current='taskend'
+
+
+##########################################################################
+
+<TaskEndLayout>
+    canvas.before:
+        BorderImage:
+            # BorderImage behaves like the CSS BorderImage
+            border: 0,0,0,0
+            texture: self.background_image.texture
+            pos: self.pos
+            size: self.size
+
+<PomodoroTaskEnd>
+    id:taskend
+    on_enter: taskend.break_time()
+    TaskEndLayout:
+        id: taskendlay
+        size_hint: .95, .95
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        cols: 1
+        rows:1
+        BoxLayout:
+            Label:
+                id: break_timer_label
+                text: root.init_break_time
+                bold: True
+                underline: True
+                font_size: 10
+                color: (0, 0, 0, 1)
