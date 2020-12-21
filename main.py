@@ -10,13 +10,15 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.image import Image
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.graphics import Color, Ellipse, Rectangle
 from kivy.clock import Clock
+from kivy.graphics.instructions import Canvas, CanvasBase
 
 from macos_speech import Synthesizer
 
 speaker = Synthesizer(voice='Alex', device='Built-in')
 
-num_blocks, list_tasks = (0, '')
+num_blocks, list_tasks, list_completed = (0, '', [])
 
 
 class TitleLayout(GridLayout):
@@ -26,7 +28,7 @@ class TitleLayout(GridLayout):
 
 class TaskLayout(BoxLayout):
     background_image = ObjectProperty(
-        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/spin_square.gif', anim_delay=.07))
+        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/swirl_square.gif', anim_delay=.07))
 
 
 class TaskStartLayout(BoxLayout):
@@ -56,10 +58,26 @@ class PomodoroTask(Screen):
 
     def time_elapsed(self, dt):
         lab_text = self.ids['time_lab']
+        pb_text = self.ids['pb']
         self.full_time = self.full_time - 1
         min_elapsed, sec_elapsed = divmod(self.full_time, 60)
         formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining."
         lab_text.text = formatted_text
+        pb_text.value = self.full_time
+        pb_text.canvas.clear()
+        with pb_text.canvas:
+            # Draw no-progress circle
+            Color(0.46, 0.46, 0.46, .7)
+            Ellipse(pos=pb_text.pos, size=pb_text.size)
+            # Draw progress circle, small hack if there is no progress (angle_end = 0 results in full progress)
+            Color(1, 0, 0, .5)
+            Ellipse(pos=pb_text.pos, size=pb_text.size,
+                    angle_end=(0.001 if pb_text.value_normalized == 0 else pb_text.value_normalized*360))
+            # Draw the inner circle (colour should be equal to the background)
+            Color(0, 0, 0, .8)
+            Ellipse(pos=(pb_text.pos[0] + pb_text.thickness / 2, pb_text.pos[1] + pb_text.thickness / 2),
+                    size=(pb_text.size[0] - pb_text.thickness, pb_text.size[1] - pb_text.thickness))
+
         if self.full_time == 0:
             self.manager.current = 'taskstart'
             return False
@@ -72,7 +90,14 @@ class PomodoroTask(Screen):
 
 class PomodoroTaskStart(Screen):
     def next_label(self):
-        print(num_blocks, list_tasks)
+        # global list_tasks
+        # global list_completed
+
+        # list_tasks=list_tasks.split()
+
+        # for task in list_tasks:
+        #     self.add_widget(C)
+
         event_3 = Clock.create_trigger(
             self.speaker_end, timeout=1, interval=False)
         event_3()
@@ -83,12 +108,13 @@ class PomodoroTaskStart(Screen):
 
 
 class PomodoroTaskEnd(Screen):
-    brk_time = 3
+    brk_time = 30
     min_elapsed, sec_elapsed = divmod(brk_time, 60)
     init_break_time = StringProperty(
         f"{min_elapsed:02d}:{sec_elapsed:02d} remaining.")
 
     def break_time(self):
+        global num_blocks
         event = Clock.create_trigger(
             self.time_elapsed, timeout=1, interval=True)
         event()

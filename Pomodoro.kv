@@ -88,14 +88,45 @@
         pos_hint: {'center_x': .5, 'center_y': .5}
         cols: 1
         rows:1
-        Label:
-            id: time_lab
-            text: root.init
-            bold: True
-            underline: True
-            font_size: 40
-            color:(0,0,0,1)
-            size_hint: .5, .5
+        FloatLayout:
+            ProgressBar:
+                id: pb
+                thickness:40
+                size_hint: (0.55,0.7)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                max: root.full_time
+                value: 3
+                texture_size: None
+                label: root.init   
+                canvas:
+                    Clear
+                    Color:
+                        rgba: (0.46, 0.46, 0.46, .7)
+                    Ellipse:
+                        pos: pb.pos
+                        size: pb.size
+
+                    Color:
+                        rgba: (1, 0, 0, .5)
+                    Ellipse:
+                        pos: pb.pos
+                        size: pb.size
+                        angle_end: (0.001 if pb.value_normalized == 0 else pb.value_normalized*360)
+                    
+                    Color:
+                        rgba: (0, 0, 0, .8)
+                    Ellipse:
+                        pos: (pb.pos[0] + pb.thickness / 2, pb.pos[1] + pb.thickness / 2)
+                        size: (pb.size[0] - pb.thickness, pb.size[1] - pb.thickness)
+                 
+            Label:
+                id: time_lab
+                text: root.init
+                bold: True
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                underline: True
+                font_size: 40
+                color:(1,1,1,1)
 
 ############################################################
 <TaskStartLayout>
@@ -116,20 +147,20 @@
         pos_hint: {'center_x': .5, 'center_y': .5}
         cols: 1
         rows:1
-        BoxLayout:
+        FloatLayout:
             Label:
                 id: timer_label
                 text: "Good job!\nDid you complete a task within this block of time? (y/n): "
                 bold: True
                 underline: True
-                font_size: 10
-                pos_hint: {'center_x': .5, 'center_y': .2}
+                font_size: 15
+                pos_hint: {'right': 0.8, 'center_y': .2}
                 color: (0, 0, 0, 1)
             TextInput:
-                id: completion 
+                id: completion
                 multiline: False
-                size_hint: (0.9,0.1)
-                pos_hint: {'center_x': .5, 'center_y': .2}
+                size_hint: (0.4,0.05)
+                pos_hint: {'right': .95, 'center_y': .19}
                 background_color: (0, 0, 0, .4)
                 on_text_validate: root.manager.current='taskend'
 
