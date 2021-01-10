@@ -37,7 +37,6 @@
                 font_size: 20
                 bold:True
                 color:(0,0,0,1)
-                on_text_validate: 
             TextInput:
                 id: bl2
                 multiline: False
@@ -141,28 +140,38 @@
 <PomodoroTaskStart>
     id:taskstart
     on_enter: taskstart.next_label()
+    on_leave: taskstart.clear_widgets()
     TaskStartLayout:
         id: taskstartlay
         size_hint: .95, .95
         pos_hint: {'center_x': .5, 'center_y': .5}
         cols: 1
         rows:1
-        FloatLayout:
-            Label:
-                id: timer_label
-                text: "Good job!\nDid you complete a task within this block of time? (y/n): "
-                bold: True
-                underline: True
-                font_size: 15
-                pos_hint: {'right': 0.8, 'center_y': .2}
-                color: (0, 0, 0, 1)
-            TextInput:
-                id: completion
-                multiline: False
-                size_hint: (0.4,0.05)
-                pos_hint: {'right': .95, 'center_y': .19}
-                background_color: (0, 0, 0, .4)
-                on_text_validate: root.manager.current='taskend'
+        BoxLayout:
+            orientation:'vertical'
+
+            AnchorLayout:
+                anchor_x: 'center'
+                anchor_y: 'top'
+                Label:
+                    id: timer_label
+                    text: "Good job!\nPress the corresponding checkbox if you completed a task: "
+                    bold: True
+                    underline: True
+                    font_size: 15
+                    pos_hint: {'right': 0.8, 'center_y': .3}
+                    color: (0, 0, 0, 1)
+            AnchorLayout:
+                anchor_x: 'center'
+                anchor_y:'bottom'
+                Button:
+                    text:'Enter'
+                    id: completion
+                    multiline: False
+                    size_hint: (0.4,0.05)
+                    pos_hint: {'right': .95, 'center_y': .19}
+                    background_color: (0, 0, 0, .4)
+                    on_press: taskstart.break_type()
 
 
 ##########################################################################
@@ -194,3 +203,86 @@
                 font_size: 35
                 underline: True
                 color: (0, 0, 0, 1)
+
+
+#################################################################################
+<FourTasksEndLayout>
+    canvas.before:
+        BorderImage:
+            # BorderImage behaves like the CSS BorderImage
+            border: 0,0,0,0
+            texture: self.background_image.texture
+            pos: self.pos
+            size: self.size
+
+<Pomodoro4TasksEnd>
+    id:fourtasksend
+    on_enter: fourtasksend.break_time()
+    TaskEndLayout:
+        id: taskendlay
+        size_hint: .95, .95
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        cols: 1
+        rows:1
+        BoxLayout:
+            Label:
+                id: big_break_timer_label
+                text: root.init_break_time
+                pos_hint: {'center_x': .5, 'center_y': .25}
+                bold: True
+                font_size: 35
+                underline: True
+                color: (0, 0, 0, 1)
+
+
+###############################################################
+
+
+<AppEndLayout>
+    canvas.before:
+        BorderImage:
+            # BorderImage behaves like the CSS BorderImage
+            border: 2,2,2,2
+            texture: self.background_image.texture
+            pos: self.pos
+            size: self.size
+
+<PomodoroAppEnd>
+    id:append
+    AppEndLayout:
+        id: appendlayout
+        size_hint: .95, .95
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        cols: 1
+        rows:5
+        Label:
+            id: append1
+            text: "Congratulations! you have completed the number blocks you set out to attempt!"
+            multiline:True
+            bold: True
+            underline: True
+            font_size: 20
+            color:(0,0,0,1)
+            size_hint: .5, .5
+        BoxLayout:
+            id: append2
+            orientation: 'horizontal'
+            size_hint: .2, .2
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            Button:
+                text:"Restart"
+                id: append3
+                multiline: False
+                background_active: ""
+                background_color: (0,0,0,.4)
+                size_hint: (0.5,.5)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                on_press:root.manager.current='titlemain'
+            Button:
+                text:"Quit"
+                id: text1
+                multiline: True
+                background_active: ""
+                background_color: (0,0,0,.4)
+                size_hint: (.5,.5)
+                on_press:app.stop()
