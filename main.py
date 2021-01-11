@@ -192,6 +192,7 @@ class Pomodoro4TasksEnd(Screen):
     def time_elapsed(self, dt):
         global num_blocks_done
         global num_blocks_left
+        global big_breaktime
 
         lab_text = self.ids['big_break_timer_label']
         self.brk_time = self.brk_time - 1
@@ -199,14 +200,14 @@ class Pomodoro4TasksEnd(Screen):
         formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining."
         lab_text.text = formatted_text
         if self.brk_time == 0:
-
             if num_blocks_left > 0:
                 self.manager.current = 'taskmain'
             else:
                 self.manager.current = 'append'
-
             self.brk_time = big_breaktime
-
+            min_elapsed, sec_elapsed = divmod(self.brk_time, 60)
+            formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining."
+            lab_text.text = formatted_text
             return False
         elif num_blocks_done % 4 == 0:
             self.manager.current = '4tasksend'
@@ -232,6 +233,7 @@ class PomodoroTaskEnd(Screen):
     def time_elapsed(self, dt):
         global num_blocks_done
         global num_blocks_left
+        global breaktime
 
         lab_text = self.ids['break_timer_label']
         self.brk_time = self.brk_time - 1
@@ -244,6 +246,10 @@ class PomodoroTaskEnd(Screen):
             else:
                 self.manager.current = 'append'
             self.brk_time = breaktime
+            min_elapsed, sec_elapsed = divmod(self.brk_time, 60)
+            formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining."
+            lab_text.text = formatted_text
+
             return False
 
     def speaker_end(self):
