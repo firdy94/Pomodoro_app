@@ -39,32 +39,32 @@ def on_checkbox_active(dic):
 
 class TitleLayout(GridLayout):
     background_image = ObjectProperty(
-        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/swirl_square.gif', anim_delay=.07))
+        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/abstract_red.gif', anim_delay=.05))
 
 
 class TaskLayout(BoxLayout):
     background_image = ObjectProperty(
-        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/swirl_square.gif', anim_delay=.07))
+        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/typing_red.gif', anim_delay=.02))
 
 
 class TaskStartLayout(BoxLayout):
     background_image = ObjectProperty(
-        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/tomato1.gif', anim_delay=.07))
+        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/celebration_red.gif', anim_delay=.05))
 
 
 class TaskEndLayout(BoxLayout):
     background_image = ObjectProperty(
-        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/break_square.gif', anim_delay=.07))
+        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/cloud_red.gif', anim_delay=.05))
 
 
 class FourTasksEndLayout(BoxLayout):
     background_image = ObjectProperty(
-        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/break_square.gif', anim_delay=.07))
+        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/cloud_red.gif', anim_delay=.05))
 
 
 class AppEndLayout(BoxLayout):
     background_image = ObjectProperty(
-        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/tomato-slice.gif', anim_delay=.07))
+        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/abstract_main.gif', anim_delay=.07))
 
 
 class PomodoroTitle(Screen):
