@@ -20,7 +20,7 @@ from macos_speech import Synthesizer
 speaker = Synthesizer(voice='Alex')
 
 num_blocks_left, num_blocks_done, list_tasks, list_completed = (0, 0, '', [])
-task_time, breaktime, big_breaktime = 3, 4, 5
+task_time, breaktime, big_breaktime = 1, 1, 1
 check_ref_box, whole_box = [], None
 
 
@@ -64,7 +64,7 @@ class FourTasksEndLayout(BoxLayout):
 
 class AppEndLayout(BoxLayout):
     background_image = ObjectProperty(
-        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/abstract_main.gif', anim_delay=.07))
+        Image(source='/Users/mac/Documents/GitHub/Pomodoro_app/background_GIFS/abstract_red.gif', anim_delay=.07))
 
 
 class PomodoroTitle(Screen):
@@ -81,7 +81,7 @@ class PomodoroTask(Screen):
     global task_time
     full_time = task_time
     min_elapsed, sec_elapsed = divmod(full_time, 60)
-    init = StringProperty(f"{min_elapsed:02d}:{sec_elapsed:02d} remaining.")
+    init = StringProperty(f"{min_elapsed:02d}:{sec_elapsed:02d} remaining")
 
     def time_elapsed(self, dt):
         print(self.full_time)
@@ -89,36 +89,17 @@ class PomodoroTask(Screen):
         global num_blocks_left
         global task_time
         lab_text = self.ids['time_lab']
-        pb_text = self.ids['pb']
         self.full_time = self.full_time - 1
         min_elapsed, sec_elapsed = divmod(self.full_time, 60)
-        formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining."
+        formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining"
         lab_text.text = formatted_text
-        pb_text.value = self.full_time
-        pb_text.canvas.clear()
-        with pb_text.canvas:
-            # Draw no-progress circle
-            Color(0.46, 0.46, 0.46, .7)
-            Ellipse(pos=pb_text.pos, size=pb_text.size)
-            # Draw progress circle, small hack if there is no progress (angle_end = 0 results in full progress)
-            Color(1, 0, 0, .5)
-            Ellipse(pos=pb_text.pos, size=pb_text.size,
-                    angle_end=(0.001 if pb_text.value_normalized == 0 else pb_text.value_normalized*360))
-            # Draw the inner circle (colour should be equal to the background)
-            Color(0, 0, 0, .8)
-            Ellipse(pos=(pb_text.pos[0] + pb_text.thickness / 2, pb_text.pos[1] + pb_text.thickness / 2),
-                    size=(pb_text.size[0] - pb_text.thickness, pb_text.size[1] - pb_text.thickness))
-
         if self.full_time == 0:
             num_blocks_left -= 1
             num_blocks_done += 1
             self.manager.current = 'taskstart'
             self.full_time = task_time
             min_elapsed, sec_elapsed = divmod(self.full_time, 60)
-            lab_text.text = (f"{min_elapsed:02d}:{sec_elapsed:02d} remaining.")
-            pb_text.value = self.full_time
-            pb_text.max = self.full_time
-
+            lab_text.text = (f"{min_elapsed:02d}:{sec_elapsed:02d} remaining")
             return False
 
     def task(self):
@@ -136,7 +117,7 @@ class PomodoroTaskStart(Screen):
         global check_ref_box
         global whole_box
 
-        lay = BoxLayout(orientation='vertical', size=self.size, size_hint=(1, .2), pos_hint={
+        lay = BoxLayout(orientation='vertical', size=self.size, size_hint=(1, .4), pos_hint={
                         'center_x': .4, 'center_y': .5})
         lay.clear_widgets()
         for i, task in enumerate(list_tasks):
@@ -149,7 +130,7 @@ class PomodoroTaskStart(Screen):
                 active=lambda checkid, checkval: on_checkbox_active(self.check_ref))
             layout.add_widget(check)
             layout.add_widget(
-                Label(text=task, color=(0, 0, 0, 1)))
+                Label(text=task, color=(1, 1, 1, 1)))
             lay.add_widget(layout)
         self.add_widget(lay)
         event_3 = Clock.create_trigger(
@@ -181,7 +162,7 @@ class Pomodoro4TasksEnd(Screen):
     brk_time = big_breaktime
     min_elapsed, sec_elapsed = divmod(big_breaktime, 60)
     init_break_time = StringProperty(
-        f"{min_elapsed:02d}:{sec_elapsed:02d} remaining.")
+        f"{min_elapsed:02d}:{sec_elapsed:02d} remaining")
 
     def break_time(self):
         self.speaker_4_end()
@@ -197,7 +178,7 @@ class Pomodoro4TasksEnd(Screen):
         lab_text = self.ids['big_break_timer_label']
         self.brk_time = self.brk_time - 1
         min_elapsed, sec_elapsed = divmod(self.brk_time, 60)
-        formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining."
+        formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining"
         lab_text.text = formatted_text
         if self.brk_time == 0:
             if num_blocks_left > 0:
@@ -206,7 +187,7 @@ class Pomodoro4TasksEnd(Screen):
                 self.manager.current = 'append'
             self.brk_time = big_breaktime
             min_elapsed, sec_elapsed = divmod(self.brk_time, 60)
-            formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining."
+            formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining"
             lab_text.text = formatted_text
             return False
         elif num_blocks_done % 4 == 0:
@@ -222,7 +203,7 @@ class PomodoroTaskEnd(Screen):
     brk_time = breaktime
     min_elapsed, sec_elapsed = divmod(breaktime, 60)
     init_break_time = StringProperty(
-        f"{min_elapsed:02d}:{sec_elapsed:02d} remaining.")
+        f"{min_elapsed:02d}:{sec_elapsed:02d} remaining")
 
     def break_time(self):
         self.speaker_end()
@@ -238,7 +219,7 @@ class PomodoroTaskEnd(Screen):
         lab_text = self.ids['break_timer_label']
         self.brk_time = self.brk_time - 1
         min_elapsed, sec_elapsed = divmod(self.brk_time, 60)
-        formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining."
+        formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining"
         lab_text.text = formatted_text
         if self.brk_time == 0:
             if num_blocks_left > 0:
@@ -247,7 +228,7 @@ class PomodoroTaskEnd(Screen):
                 self.manager.current = 'append'
             self.brk_time = breaktime
             min_elapsed, sec_elapsed = divmod(self.brk_time, 60)
-            formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining."
+            formatted_text = f"{min_elapsed:02d}:{sec_elapsed:02d} remaining"
             lab_text.text = formatted_text
 
             return False
