@@ -30,7 +30,8 @@ def on_checkbox_active(dic):
     for idx, wgt in dic.items():
         check_obj = wgt[0]
         task_name = wgt[1]
-        if check_obj.active:
+        
+        if check_obj.active and task_name not in list_completed:
             list_completed.append(task_name)
             list_tasks.remove(task_name)
             print(f"{wgt[1]} has been completed")
