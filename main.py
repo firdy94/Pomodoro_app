@@ -257,20 +257,3 @@ class PomodoroApp(App):
 
 if __name__ == '__main__':
     PomodoroApp().run()
-
-
-# num_completed = 0
-# task_completed = 0
-# for num in range(num_cycles):
-#     task_status = pomodoro_task()
-#     num_completed += 1
-#     if task_status == 'y':
-#         task_completed += 1
-#     if (num_completed % 4) == 0:
-#         pomodoro_big_break()
-#     else:
-#         pomodoro_mini_break()
-# print(
-#     f"Well done completing {num_completed} blocks of work! How you were very productive and lets do this more often!")
-
-# tomato = u"\U0001F345"
