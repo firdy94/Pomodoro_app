@@ -30,7 +30,7 @@ def on_checkbox_active(dic):
     for idx, wgt in dic.items():
         check_obj = wgt[0]
         task_name = wgt[1]
-        
+
         if check_obj.active and task_name not in list_completed:
             list_completed.append(task_name)
             list_tasks.remove(task_name)
@@ -73,8 +73,12 @@ class PomodoroTitle(Screen):
     def update_val(self):
         global num_blocks_left
         global list_tasks
-        num_blocks_left = int(self.ids['bl2'].text)
-        list_tasks = self.ids['text1'].text.split(sep='\n')
+        input_num_blocks = self.ids['bl2']
+        input_tasks = self.ids['text1']
+        num_blocks_left = int(input_num_blocks.text)
+        list_tasks = input_tasks.text.split(sep='\n')
+        input_num_blocks.text = ''
+        input_tasks.text = ''
     pass
 
 
