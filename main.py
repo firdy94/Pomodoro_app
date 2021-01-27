@@ -17,10 +17,10 @@ from kivy.uix.checkbox import CheckBox
 
 from macos_speech import Synthesizer
 
-speaker = Synthesizer(voice='Alex')
+speaker = Synthesizer(voice='Fiona', rate=30)
 
 num_blocks_left, num_blocks_done, list_tasks, list_completed = (0, 0, '', [])
-task_time, breaktime, big_breaktime = 1, 1, 1
+task_time, breaktime, big_breaktime = 1500, 300, 1200
 check_ref_box, whole_box = [], None
 
 
@@ -89,7 +89,6 @@ class PomodoroTask(Screen):
     init = StringProperty(f"{min_elapsed:02d}:{sec_elapsed:02d} remaining")
 
     def time_elapsed(self, dt):
-        print(self.full_time)
         global num_blocks_done
         global num_blocks_left
         global task_time
@@ -144,7 +143,7 @@ class PomodoroTaskStart(Screen):
         whole_box = lay
 
     def speaker_end(self, dt):
-        formatted_text = "Good job! Did you complete a task?"
+        formatted_text = "Good job![200] Did you complete a task?"
         speaker.say(formatted_text)
 
     def clear_widgets(self):
@@ -199,7 +198,7 @@ class Pomodoro4TasksEnd(Screen):
             self.manager.current = '4tasksend'
 
     def speaker_4_end(self):
-        formatted_text = "Good job getting a big pomodoro! You've earned a long break to rest and re-energize!"
+        formatted_text = "Good job getting a big pomodoro! [200] You have earned a long break to rest and re-energize!"
         speaker.say(formatted_text)
 
 
@@ -239,7 +238,7 @@ class PomodoroTaskEnd(Screen):
             return False
 
     def speaker_end(self):
-        formatted_text = "Good job getting a pomodoro! You've earned a few minutes to spend however you like!"
+        formatted_text = "Good job getting a pomodoro![200] You have earned a few minutes to spend however you like!"
         speaker.say(formatted_text)
 
 
